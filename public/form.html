@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>CS313 Teach 09</title>
+</head>
+<body>
+    <h1>Teach 09</h1>
+    <form id="math" method="post" action="/math" >
+        <h2>Caclulate the result and display it</h2>
+        <input type="number" name="lhs" placeholder="operand" />
+        <input type="text" name="operator" placeholder="operator" />
+        <input type="number" name="rhs" placeholder="operand" />
+        <input type="submit" name="submit" value="Submit" />
+    </form>
+    <form id="mathservice" method="post" action="/math_service" >
+        <h2>Calculate the result and return JSON</h2>
+        <input type="number" name="lhs" placeholder="operand" />
+        <input type="text" name="operator" placeholder="operator" />
+        <input type="number" name="rhs" placeholder="operand" />
+        <input type="submit" name="submit" value="Submit" />
+    </form>
+</body>
+</html>
