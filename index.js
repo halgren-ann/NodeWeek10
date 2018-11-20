@@ -11,7 +11,7 @@ express()
     var basePrice = 0;
     answer = "";
     var v1 = Number(req.query.weight);
-    if (req.query.mailType == 'stamped') {
+    if (req.query.mailType == "stamped") {
       basePrice = 0.50;
       answer = "Your selected mail was: 'Letters (Stamped)' \n" +
                "You specified that the wight of your package is:  " + v1 + "oz\n" +
