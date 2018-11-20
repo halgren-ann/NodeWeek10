@@ -60,9 +60,9 @@ express()
             "The price of mailing your package is: $" + (basePrice);
     }
 
-    res.render('views/pages/result', {
-        result: answer
+    res.render('pages/result', {
+        result: basePrice
     })
-    res.end();
+    
 })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
