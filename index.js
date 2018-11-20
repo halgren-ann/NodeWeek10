@@ -7,7 +7,7 @@ express()
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/form'))
-  .post('getRate', (req, res) => {
+  .post('/getRate', (req, res) => {
     var basePrice = 0;
     var v1 = req.body.weight;
     if (req.body.mailType == 'stamped') {
