@@ -9,7 +9,8 @@ express()
   .get('/', (req, res) => res.render('pages/form'))
   .post('/getRate', (req, res) => {
     var basePrice = 0;
-    var v1 = req.body.weight;
+    var answer = null;
+    var v1 = Number(req.body.weight);
     if (req.body.mailType == 'stamped') {
       basePrice = 0.50;
       answer = "Your selected mail was: 'Letters (Stamped)' \n" +
@@ -59,7 +60,7 @@ express()
             "The price of mailing your package is: $" + (basePrice);
     }
 
-    res.render('pages/result', {
+    res.render('views/pages/result', {
         result: answer
     })
     res.end();
