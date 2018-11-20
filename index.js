@@ -8,9 +8,9 @@ express()
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
   .post('/getRate', (req, res) => {
-    var basePrice = 0;
-    var answer = null;
-    var v1 = Number(req.query.weight);
+    //var basePrice = 0;
+    //answer = null;
+    //var v1 = Number(req.query.weight);
     if (req.query.mailType == 'stamped') {
       basePrice = 0.50;
       answer = "Your selected mail was: 'Letters (Stamped)' \n" +
