@@ -1,9 +1,12 @@
 const express = require('express')
 const path = require('path')
+var parser = require('body-parser')
 const PORT = process.env.PORT || 5000
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
+  .use(parser.urlencoded({ extended: false }))
+  .use(parser.json())
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
@@ -11,13 +14,13 @@ express()
     var basePrice = 0;
     answer = "";
     var v1 = Number(req.query.weight);
-    if (req.query.mailType == "Letters(Stamped)") {
+    if (req.body.mailType == "Letters(Stamped)") {
       basePrice = 0.50;
       answer = "Your selected mail was: 'Letters (Stamped)' \n" +
                "You specified that the wight of your package is:  " + v1 + "oz\n" +
                "The price of mailing your package is: $" + (basePrice + (0.21 * (v1-1)));
     }
-    else if (req.query.mailType == 'metered'){
+    else if (req.body.mailType == 'metered'){
         basePrice = 0.47;
         answer = "Your selected mail was: 'Letters (Metered)' \n" +
                 "You specified that the wight of your package is:  " + v1 + "oz\n" +
