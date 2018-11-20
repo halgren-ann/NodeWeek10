@@ -11,10 +11,10 @@ express()
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
   .post('/getRate', (req, res) => {
-    var basePrice = 0;
-    answer = "";
-    var v1 = Number(req.query.weight);
-    if (req.body.mailType == "Letters(Stamped)") {
+    var basePrice = Number(0);
+    var answer = "";
+    var v1 = Number(req.body.weight);
+    if (req.body.mailType == "stamped") {
       basePrice = 0.50;
       answer = "Your selected mail was: 'Letters (Stamped)' \n" +
                "You specified that the wight of your package is:  " + v1 + "oz\n" +
@@ -26,7 +26,7 @@ express()
                 "You specified that the wight of your package is:  " + v1 + "oz\n" +
                 "The price of mailing your package is: $" + (basePrice + (0.21 * (v1-1)));
     }
-    else if (req.query.mailType == 'flats'){
+    else if (req.body.mailType == 'flats'){
         basePrice = 1.0;
         answer = "Your selected mail was: 'Large Envelopes (Flats)' \n" +
             "You specified that the wight of your package is:  " + v1 + "oz\n" +
