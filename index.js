@@ -61,7 +61,7 @@ express()
     }
 
     res.render('pages/result', {
-        result: basePrice
+        result: answer
     })
     
 })
