@@ -68,9 +68,12 @@ app.post("/saveplannedday", function(req, res) {
     console.log("Saving the state of a current planned day or creating a new planned day");
 });
 
-app.listen(5000, function() {
-    console.log("The server is up and listening on port 5000");
-});
+//use for local testing
+//app.listen(5000, function() {
+//    console.log("The server is up and listening on port 5000");
+//});
+
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 //In ejs:
 //<!--put <%= username %> to echo the username var from javascript. Any javascript can go between <% %>-->
