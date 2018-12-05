@@ -62,10 +62,14 @@ table {
 
 tr {
     height: 10%;
-    width: 14.29%;
 }
 
 td {
+    width: 14.29%;
     height: 30%;
     border: 1px solid black;
+}
+
+select {
+    width: 75%;
 }
