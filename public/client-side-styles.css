@@ -1,5 +1,7 @@
 body {
     position: fixed;
+    top: 0%;
+    left: 0%;
     width: 100%;
     height: 100%;
     background-image: url("just-waves.png");
@@ -10,20 +12,42 @@ header {
     top: 5%;
     width: 100%;
     height: 10%;
-    line-height: 10%;
     background-color: rgba(51, 153, 255, 0.5);
     border: 5px solid white;
 }
 
 .navbar {
-    position: relative;
+    position: absolute;
 }
 
 button.navbar {
-    left: 5%;
-    height: 5%;
+    height: 50%;
     width: 15%;
     background-color: white;
     border: 2px solid black;
-    border-radius: 10px;
+    border-radius: 10%;
+}
+
+#dashboardBtn {
+    top: 25%;
+    left: 2%;
+}
+
+#addRecipeBtn {
+    top: 25%;
+    left: 19%;
+}
+
+#planMealsBtn {
+    top: 25%;
+    left: 36%;
+}
+
+#groceryListBtn {
+    top: 25%;
+    left: 53%;
+}
+
+#dashboardSection {
+
 }
