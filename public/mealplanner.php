@@ -33,9 +33,32 @@
                 <th>Saturday</th>
             </tr>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                    <select name="" class="">
+                        <option value="">Breakfast</option>
+                        <option value=""></option>
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+                    <select name="" class="">
+                        <option value="">Lunch</option>
+                        <option value=""></option>
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+                    <select name="" class="">
+                        <option value="">Dinner</option>
+                        <option value=""></option>
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+                </td>
+                <td>
+                    
+                </td>
+                <td>
+                
+                </td>
                 <td></td>
                 <td></td>
                 <td></td>
