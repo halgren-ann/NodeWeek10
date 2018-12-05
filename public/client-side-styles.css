@@ -61,10 +61,10 @@ table {
 }
 
 tr {
-    
+    height: 10%;
 }
 
 td {
-    
+    height: 30%;
     border: 1px solid black;
 }
