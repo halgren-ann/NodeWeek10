@@ -54,17 +54,17 @@ button.navbar {
 table {
     position: absolute;
     top: 5%;
-    left: 4.5%;
+    left: 2%;
+    width: 96%;
+    height: 90%;
     border: 5px solid black;
 }
 
 tr {
-    width: 13%;
-    height: 9%;
-    border: 3px solid black;
+    
 }
 
 td {
-    height: 27%;
+    
     border: 1px solid black;
 }
