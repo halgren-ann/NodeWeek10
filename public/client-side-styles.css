@@ -9,7 +9,7 @@ body {
 
 header {
     position: absolute;
-    top: 5%;
+    top: 2%;
     width: 100%;
     height: 10%;
     background-color: rgba(51, 153, 255, 0.5);
@@ -25,7 +25,7 @@ button.navbar {
     width: 15%;
     background-color: white;
     border: 2px solid black;
-    border-radius: 10%;
+    border-radius: 20%;
 }
 
 #dashboardBtn {
@@ -41,13 +41,4 @@ button.navbar {
 #planMealsBtn {
     top: 25%;
     left: 36%;
-}
-
-#groceryListBtn {
-    top: 25%;
-    left: 53%;
-}
-
-#dashboardSection {
-
 }
