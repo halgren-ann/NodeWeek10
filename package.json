@@ -11,11 +11,15 @@
     "test": "node test.js"
   },
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "ejs": "^2.5.6",
     "express": "^4.15.2",
-    "pg": "^7.6.1"
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.1",
+    "pg": "^7.6.1",
+    "session-file-store": "^1.2.0"
   },
   "devDependencies": {
     "request": "^2.81.0",

@@ -4,10 +4,24 @@ const PORT = process.env.PORT || 5000;
 
 var app = express();
 
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 const { Pool } = require("pg");
 const db_url = process.env.DATABASE_URL;
 const pool = new Pool({connectionString: db_url});
 var bodyParser = require('body-parser');
+
+app.use(require('morgan')('dev'));
+var session = require('express-session');
+var FileStore = require('session-file-store')(session);
+app.use(session({
+  name: 'server-session-cookie-id',
+  secret: 'byui project',
+  saveUninitialized: true,
+  resave: true,
+  store: new FileStore()
+}));
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -63,6 +77,19 @@ app.post("/newuser", function(req, res) {
     var username = req.body.username;
     //also hashed password here
     console.log("Adding a new user");
+    /*
+    bcrypt.hash(myPlaintextPassword, saltRounds, function(err, hash) {
+        // Store hash in your password DB.
+    });
+
+    // Load hash from your password DB.
+    bcrypt.compare(myPlaintextPassword, hash, function(err, res) {
+        // res == true
+    });
+    bcrypt.compare(someOtherPlaintextPassword, hash, function(err, res) {
+        // res == false
+    });
+    */
 });
 
 app.post("/getPlannedMeal", function(req, res) {
@@ -157,49 +184,49 @@ app.post("/saveplannedday", function(req, res) {
         else {
             console.log("db_results size: "+db_results.rows.length);
             recipeId = db_results.rows[0].id;
-        }
-    });
-    //find if the day has been planned before or not
-    var sql = "SELECT id FROM public.plannedday WHERE day='"+day+"';";
-    pool.query(sql, function(err, db_results) {
-        if (err) {
-            console.log("There was an error");
-            throw err;
-        }
-        else {
-            //we're in!
-            if(db_results.rows[0]) {
-                //This day is already a "plannedday" in the database, I need to update that day
-                var sql = "UPDATE public.plannedday SET "+meal+"_id = "+recipeId+" WHERE id = "+db_results.rows[0].id+";";
-                pool.query(sql, function(err, db_results) {
-                    if (err) {
-                        console.log("There was an error");
-                        throw err;
-                    }
-                    else {
-                        //else the update worked
-                        console.log("updated successfully "+meal+" on "+day+" with "+value);
-                    }
-                });
-            }
-            else {
-                //This day is not planned yet, I need to insert a new row in the database
-                var sql = "INSERT INTO public.plannedday(user_id, day, "+meal+"_id) VALUES("+user_id+", '"+day+"', "+recipeId+");";
-                pool.query(sql, function(err, db_results) {
-                    if (err) {
-                        console.log("There was an error");
-                        throw err;
-                    }
-                    else {
-                        //else the insert worked
-                        console.log("recipeId: "+recipeId);
-                        console.log("inserted successfully "+meal+" on "+day+" with "+value);
-                    }
-                });
-            }
-        }
-    });
 
+            //find if the day has been planned before or not
+            var sql = "SELECT id FROM public.plannedday WHERE day='"+day+"';";
+            pool.query(sql, function(err, db_results) {
+                if (err) {
+                    console.log("There was an error");
+                    throw err;
+                }
+                else {
+                    //we're in!
+                    if(db_results.rows[0]) {
+                        //This day is already a "plannedday" in the database, I need to update that day
+                        var sql = "UPDATE public.plannedday SET "+meal+"_id = "+recipeId+" WHERE id = "+db_results.rows[0].id+";";
+                        pool.query(sql, function(err, db_results) {
+                            if (err) {
+                                console.log("There was an error");
+                                throw err;
+                            }
+                            else {
+                                //else the update worked
+                                console.log("updated successfully "+meal+" on "+day+" with "+value);
+                            }
+                        });
+                    }
+                    else {
+                        //This day is not planned yet, I need to insert a new row in the database
+                        var sql = "INSERT INTO public.plannedday(user_id, day, "+meal+"_id) VALUES("+user_id+", '"+day+"', "+recipeId+");";
+                        pool.query(sql, function(err, db_results) {
+                            if (err) {
+                                console.log("There was an error");
+                                throw err;
+                            }
+                            else {
+                                //else the insert worked
+                                console.log("recipeId: "+recipeId);
+                                console.log("inserted successfully "+meal+" on "+day+" with "+value);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
 });
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
