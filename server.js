@@ -1,8 +1,16 @@
 var express = require('express');
+require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 
 var app = express();
 
+const { Pool } = require("pg");
+const db_url = process.env.DATABASE_URL;
+const pool = new Pool({connectionString: db_url});
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -10,47 +18,43 @@ app.use(express.urlencoded({extended: true}));
 app.set("views", "views");
 app.set("view engine", "ejs");
 
-app.get("/", function(req, res) {
-    console.log("This is the root");
-});
-
 app.get("/home", function(req, res) {
     console.log("Received a request for the home page");
-    var params = {}; //JSON
-    res.render("pages/home", params);
+    var params = {"array": ["a","b", "c", "d", "e", "f", "g"]}; //JSON
+    res.render("pages/makeCalendar", params);
 });
 
-app.get("/groceries", function(req, res) {
-    console.log("Returning the whole grocery list");
-});
-
-app.get("/mealplan", function(req, res) {
-    console.log("Returning the current version of the meal plan");
-});
-
-app.get("/getplannedday", function(req, res) {
-    var id = req.query.id;
-    console.log("Returning the planned day with id = " + id);
-});
-
-app.get("/nexttwomeals", function(req, res) {
-    console.log("Returning the next two meals");
-});
-
-app.get("/allrecipes", function(req, res) {
+app.post("/getAllRecipes", function(req, res) {
     console.log("Returning all the recipes");
-});
-
-app.get("/recipe", function(req, res) {
-    var id = req.query.id;
-    console.log("Returning the recipe with id = " + id);
+    var user_id = req.body.user_id;
+    var sql = "SELECT (title) FROM public.recipe WHERE user_id=" + user_id + ";";
+    pool.query(sql, function(err, db_results) {
+        if (err) {
+            console.log("There was an error");
+            throw err;
+        }
+        else {
+            res.json(db_results.rows);
+            res.send();
+        }
+    });
 });
 
 app.post("/addrecipe", function(req, res) {
+    //get the recipe post data here
     var title = req.body.title;
-    //get the rest of the recipe form data here
-    //all the ingredients with the amounts and the text
-    console.log("Adding a new recipe");
+    //now add it to the database
+    var sql = "INSERT INTO public.recipe(user_id, title) VALUES('1', '"+title+"');";
+    pool.query(sql, function(err, db_results) {
+        if (err) {
+            console.log("There was an error");
+            throw err;
+        }
+        else {
+            res.json("It worked!");
+            res.send();
+        }
+    });
 });
 
 app.post("/newuser", function(req, res) {
@@ -61,18 +65,142 @@ app.post("/newuser", function(req, res) {
     console.log("Adding a new user");
 });
 
-app.post("/saveplannedday", function(req, res) {
-    var date = req.body.date;
-    var breakfastId = req.body.breakfastId;
-    var lunchId = req.body.lunchId;
-    var dinnerId = req.body.dinnerId;
-    console.log("Saving the state of a current planned day or creating a new planned day");
+app.post("/getPlannedMeal", function(req, res) {
+    console.log("Checking to see if the given meal is planned yet or not");
+    var object = JSON.parse(req.body.params);
+    var day = object.day;
+    var meal = object.meal;
+    var user_id = 1;
+    //find if the day has been planned before or not
+    var sql = "SELECT id FROM public.plannedday WHERE day='"+day+"';";
+    pool.query(sql, function(err, db_results) {
+        if (err) {
+            console.log("There was an error");
+            throw err;
+        }
+        else {
+            //we're in!
+            if(db_results.rows[0]) {
+                //This day is already a "plannedday" in the database
+                var sql = "SELECT "+meal+"_id FROM public.plannedday WHERE id = "+db_results.rows[0].id+";";
+                pool.query(sql, function(err, db_results) {
+                    if (err) {
+                        console.log("There was an error");
+                        throw err;
+                    }
+                    else {
+                        //else there is a meal planned this day, check for this particular meal
+                        if (meal == "breakfast" && db_results.rows[0].breakfast_id == null) {
+                            console.log("4 - sending back N/A");
+                            res.json("N/A");
+                            res.send();
+                        }
+                        else if(meal == "lunch" && db_results.rows[0].lunch_id == null) {
+                            console.log("3 - sending back N/A");
+                            res.json("N/A");
+                            res.send();
+                        }
+                        else if(meal == "dinner" && db_results.rows[0].dinner_id == null) {
+                            console.log("2 - sending back N/A");
+                            res.json("N/A");
+                            res.send();
+                        }
+                        else {
+                            //It is planned already! Find the recipe title from it's id
+                            var recipeId;
+                            if(meal == "breakfast") recipeId = db_results.rows[0].breakfast_id;
+                            else if(meal == "lunch") recipeId = db_results.rows[0].lunch_id;
+                            else recipeId = db_results.rows[0].dinner_id;
+                            var sql = "SELECT title FROM public.recipe WHERE id = '"+recipeId+"';";
+                            pool.query(sql, function(err, db_results) {
+                                if (err) {
+                                    console.log("There was an error");
+                                    throw err;
+                                }
+                                else {
+                                    console.log("sending back "+db_results.rows[0].title);
+                                    res.json(db_results.rows[0].title);
+                                    res.send();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            else {
+                //This day is not planned yet, return "N/A"
+                console.log("1 - sending back N/A");
+                res.json("N/A");
+                res.send();
+            }
+        }
+    });
+
 });
 
-//use for local testing
-//app.listen(5000, function() {
-//    console.log("The server is up and listening on port 5000");
-//});
+app.post("/saveplannedday", function(req, res) {
+    console.log("Saving the state of a current planned day or creating a new planned day");
+    var object = JSON.parse(req.body.params);
+    var day = object.day;
+    var meal = object.meal;
+    var value = object.value;
+    console.log("value:"+value);
+    var recipeId = null;
+    var user_id = 1;
+    //get the recipeId
+    var sql = "SELECT id FROM public.recipe WHERE title = '"+value+"';";
+    pool.query(sql, function(err, db_results) {
+        if (err) {
+            console.log("There was an error");
+            throw err;
+        }
+        else {
+            console.log("db_results size: "+db_results.rows.length);
+            recipeId = db_results.rows[0].id;
+        }
+    });
+    //find if the day has been planned before or not
+    var sql = "SELECT id FROM public.plannedday WHERE day='"+day+"';";
+    pool.query(sql, function(err, db_results) {
+        if (err) {
+            console.log("There was an error");
+            throw err;
+        }
+        else {
+            //we're in!
+            if(db_results.rows[0]) {
+                //This day is already a "plannedday" in the database, I need to update that day
+                var sql = "UPDATE public.plannedday SET "+meal+"_id = "+recipeId+" WHERE id = "+db_results.rows[0].id+";";
+                pool.query(sql, function(err, db_results) {
+                    if (err) {
+                        console.log("There was an error");
+                        throw err;
+                    }
+                    else {
+                        //else the update worked
+                        console.log("updated successfully "+meal+" on "+day+" with "+value);
+                    }
+                });
+            }
+            else {
+                //This day is not planned yet, I need to insert a new row in the database
+                var sql = "INSERT INTO public.plannedday(user_id, day, "+meal+"_id) VALUES("+user_id+", '"+day+"', "+recipeId+");";
+                pool.query(sql, function(err, db_results) {
+                    if (err) {
+                        console.log("There was an error");
+                        throw err;
+                    }
+                    else {
+                        //else the insert worked
+                        console.log("recipeId: "+recipeId);
+                        console.log("inserted successfully "+meal+" on "+day+" with "+value);
+                    }
+                });
+            }
+        }
+    });
+
+});
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 

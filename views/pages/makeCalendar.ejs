@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Meal Planner</title>
+    <link rel="stylesheet" type="text/css" href="client-side-styles.css">
+</head>
+<body onload="load()">
+    <header>
+        <button id="dashboardBtn" class="navbar" onclick="selectDashboard()">Dashboard</button>
+        <button id="addRecipeBtn" class="navbar" onclick="selectAddRecipe()">Add/View Recipes</button>
+        <button id="planMealsBtn" class="navbar" onclick="selectPlanMeals()">Plan Meals</button>
+    </header>
+
+    <!--dashboard-->
+    <section id="dashboardSection">
+        <h1>Upcoming and Ongoing Meals:</h1><br>
+        <h2>Today:</h2><br>
+        <h2>Tomorrow:</h2><br>
+
+    </section>
+    <!--end of dashboard-->
+    
+    <!--meal planning-->
+    <section id="mealPlanningSection" class="hidden">
+        <table>
+            <% var counter = 0; %>
+                <tr>
+                    <th>Sunday</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                    <th>Saturday</th>
+                </tr>
+                <% for (var j=0; j<3; j++) { %>
+                <tr>
+                    <% if (j == 0) {
+                        var dateNum = new Date().getDay();
+                        var otherNum = 0;
+                    }
+                    else {
+                        var dateNum = 0;
+                        var otherNum = 0;
+                    }
+                    for (var i=otherNum; i<dateNum; i++) { %>
+                        <td></td>
+                    <% }
+                    for (var i=otherNum; i<(7-dateNum); i++) { %>
+                        <td class="highlight">
+                            <select onchange="saveChoice(this)" id="_<%= counter %>" name="" class="breakfast">
+                                <% counter += 1; %>
+                                <option value="">Breakfast</option>
+                            </select>
+                            <br>
+                            <select onchange="saveChoice(this)" id="_<%= counter %>" name="" class="lunch">
+                                <% counter += 1; %>
+                                <option value="">Lunch</option>
+                            </select>
+                            <br>
+                            <select onchange="saveChoice(this)" id="_<%= counter %>" name="" class="dinner">
+                                <% counter += 1; %>
+                                <option value="">Dinner</option>
+                            </select>
+                        </td>
+                    <% } %>
+                </tr>
+                <% } %>           
+            </table>
+        </section>
+        <!--end of meal planning-->
+    
+        <!--add a recipe-->
+        <section id="addRecipeSection" class="hidden">
+            <div id="myDIV" class="header">
+                <h2>My Recipes</h2>
+                <input type="text" id="myInput" placeholder="Enter title of recipe...">
+                <span onclick="newElement()" id="addBtn">Add</span>
+            </div>
+            <ul id="myUL">
+            </ul>
+        </section>
+        <!--end of add a recipe-->        
+    
+    <footer>
+        <script src="client-side-js.js">
+        </script>
+    </footer>
+    
+</body>
+</html>
