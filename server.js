@@ -4,14 +4,17 @@ const PORT = process.env.PORT || 5000;
 
 var app = express();
 
+/*
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+*/
 
 const { Pool } = require("pg");
 const db_url = process.env.DATABASE_URL;
 const pool = new Pool({connectionString: db_url});
 var bodyParser = require('body-parser');
 
+/*
 app.use(require('morgan')('dev'));
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
@@ -22,6 +25,7 @@ app.use(session({
   resave: true,
   store: new FileStore()
 }));
+*/
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -93,7 +97,6 @@ app.post("/newuser", function(req, res) {
 });
 
 app.post("/getPlannedMeal", function(req, res) {
-    console.log("Checking to see if the given meal is planned yet or not");
     var object = JSON.parse(req.body.params);
     var day = object.day;
     var meal = object.meal;
@@ -118,17 +121,14 @@ app.post("/getPlannedMeal", function(req, res) {
                     else {
                         //else there is a meal planned this day, check for this particular meal
                         if (meal == "breakfast" && db_results.rows[0].breakfast_id == null) {
-                            console.log("4 - sending back N/A");
                             res.json("N/A");
                             res.send();
                         }
                         else if(meal == "lunch" && db_results.rows[0].lunch_id == null) {
-                            console.log("3 - sending back N/A");
                             res.json("N/A");
                             res.send();
                         }
                         else if(meal == "dinner" && db_results.rows[0].dinner_id == null) {
-                            console.log("2 - sending back N/A");
                             res.json("N/A");
                             res.send();
                         }
@@ -145,7 +145,6 @@ app.post("/getPlannedMeal", function(req, res) {
                                     throw err;
                                 }
                                 else {
-                                    console.log("sending back "+db_results.rows[0].title);
                                     res.json(db_results.rows[0].title);
                                     res.send();
                                 }
@@ -156,7 +155,6 @@ app.post("/getPlannedMeal", function(req, res) {
             }
             else {
                 //This day is not planned yet, return "N/A"
-                console.log("1 - sending back N/A");
                 res.json("N/A");
                 res.send();
             }
@@ -171,7 +169,6 @@ app.post("/saveplannedday", function(req, res) {
     var day = object.day;
     var meal = object.meal;
     var value = object.value;
-    console.log("value:"+value);
     var recipeId = null;
     var user_id = 1;
     //get the recipeId
@@ -182,7 +179,6 @@ app.post("/saveplannedday", function(req, res) {
             throw err;
         }
         else {
-            console.log("db_results size: "+db_results.rows.length);
             recipeId = db_results.rows[0].id;
 
             //find if the day has been planned before or not
@@ -204,7 +200,6 @@ app.post("/saveplannedday", function(req, res) {
                             }
                             else {
                                 //else the update worked
-                                console.log("updated successfully "+meal+" on "+day+" with "+value);
                             }
                         });
                     }
@@ -218,8 +213,6 @@ app.post("/saveplannedday", function(req, res) {
                             }
                             else {
                                 //else the insert worked
-                                console.log("recipeId: "+recipeId);
-                                console.log("inserted successfully "+meal+" on "+day+" with "+value);
                             }
                         });
                     }

@@ -59,16 +59,15 @@ function selectCurrentPlan(element) {
 }
 
 function getDayFromId(elementId) {
-    var today = new Date();
-    var dd = today.getDate();
-    var mm = today.getMonth()+1; //January is 0!
-    var yyyy = today.getFullYear(); 
+    var day = new Date();
+    var offset = parseInt(Number(elementId.substring(1)) / 3);
+    day.setDate(day.getDate() + offset);
+    var dd = day.getDate();
+    var mm = day.getMonth()+1; //January is 0!
+    var yyyy = day.getFullYear(); 
     if(mm<10) {
         mm = '0'+mm;
-    } 
-    //now offset today by the relative calendar day
-    var offset = parseInt(Number(elementId.substring(1)) / 3);
-    dd = dd + offset;
+    }
     if(dd<10) {
         dd = '0'+dd;
     }
@@ -117,7 +116,6 @@ function saveChoice(element) {
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var array = JSON.parse(xmlhttp.responseText);
-            console.log("array returned from saveChoice: "+array);
         }
     }
 
@@ -142,7 +140,7 @@ function addtoDB(text) {
                 var inputValue = text;
                 var t = document.createTextNode(inputValue);
                 option.appendChild(t);
-                option.value = inputValue;
+                //option.value = inputValue;
                 element.add(option, 1);
             }
         }
