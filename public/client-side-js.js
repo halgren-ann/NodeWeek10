@@ -99,7 +99,7 @@ function loadRecipes() {
 
     xmlhttp.open("POST", "/getAllRecipes");
     xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xmlhttp.send(encodeURI('user_id=' + "1"));
+    xmlhttp.send();
 }
 
 function saveChoice(element) {

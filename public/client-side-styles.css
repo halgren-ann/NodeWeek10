@@ -40,6 +40,11 @@ button.navbar {
     left: 36%;
 }
 
+#logoutBtn {
+    top: 25%;
+    right: 2%;
+}
+
 .hidden {
     visibility: hidden;
 }
@@ -76,6 +81,31 @@ td {
     width: 14.29%;
     height: 30%;
     border: 1px solid black;
+}
+
+#gotosignup {
+    position: relative;
+    left: 5%;
+    font-size: 25px;   
+}
+
+input {
+    position: relative;
+    left: 5%;
+}
+
+h1 {
+    position: relative;
+    left: 3%;
+}
+
+label {
+    position: relative;
+    left: 5%;
+}
+
+a {
+    text-decoration: none;
 }
 
 select {

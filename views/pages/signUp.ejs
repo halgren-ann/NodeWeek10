@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up</title>
+    <link href="https://fonts.googleapis.com/css?family=Yesteryear" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caveat" rel="stylesheet">
+    <link href="client-side-styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="centered">
+        <h1>Sign Up</h1>
+        <form action="/newuser" method="POST">
+            <label>First Name:</label><br>
+            <input type="text" name="first_name" placeholder="Enter first name" maxlength=16 required autofocus><br><br><br>
+            <label>Last Name:</label><br>
+            <input type="text" name="last_name" placeholder="Enter last name" maxlength=16 required><br><br><br>
+            <label>Username:</label><br>
+            <input type="text" name="username" placeholder="Enter new username" maxlength=16 required><br><br><br>
+            <label>Password:</label><br>
+            <input type="password" name="user_password" placeholder="Enter new password" minlength=7 maxlength=20 required><br><br><br>
+            <input type="submit">
+        </form>
+    </div>
+     
+</body>
+</html> 
